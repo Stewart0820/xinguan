@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.stewart.system.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.stewart.vo.system.UserEditVO;
 
 /**
  * <p>
@@ -23,4 +24,17 @@ public interface UserService extends IService<User> {
      * @param user
      */
     void addUser(User user);
+
+    /**
+     * 修改用户信息
+     * @param id
+     * @param userEditVO
+     */
+    void updateUser(Long id, UserEditVO userEditVO);
+
+    /**
+     * 根据id获取用户的信息
+     * @param id
+     */
+    UserEditVO editUser(Long id);
 }

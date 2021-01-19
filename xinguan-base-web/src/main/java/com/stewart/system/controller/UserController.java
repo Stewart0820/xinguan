@@ -1,14 +1,14 @@
 package com.stewart.system.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.stewart.response.Result;
 import com.stewart.system.entity.User;
 import com.stewart.system.service.UserService;
-import com.stewart.vo.UserVO;
+import com.stewart.vo.system.UserEditVO;
+import com.stewart.vo.system.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserController {
                                @RequestParam(required = true,defaultValue = "6")Integer size){
         Page<User> page = new Page<>(current, size);
         //单表的时候其实这个方法是非常好用的
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+//        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         Page<User> userPage= userService.page(page);
         long total = userPage.getTotal();
         List<User> records = userPage.getRecords();
@@ -54,6 +54,7 @@ public class UserController {
      * @param userVO
      * @return
      */
+    @ApiOperation(value="条件查询",notes="用户条件查询")
     @PostMapping("/findUserPage")
     public Result findUserPage(@RequestParam(required = true, defaultValue = "1") Integer current,
                                @RequestParam(required = true, defaultValue = "6") Integer size,
@@ -106,5 +107,26 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="修改用户",notes="修改用户信息")
+    @PostMapping("/editUser")
+    public Result editUser(@RequestBody UserEditVO userEditVO){
+        try{
+            userService.updateUser(userEditVO.getId(),userEditVO);
+            return Result.ok();
+        }catch(Exception e){
+            return Result.error();
+        }
+    }
+
+    @ApiOperation(value="编辑用户",notes="获取用户的详情，编辑用户信息")
+    @GetMapping("/editUser")
+    public Result selectUserById(@RequestParam(required=true) Long id){
+        if(id!=null){
+            UserEditVO userEditVO = userService.editUser(id);
+            return Result.ok().data("userInfo",userEditVO);
+        }else{
+            return Result.error();
+        }
+    }
 }
 

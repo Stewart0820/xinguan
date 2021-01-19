@@ -1,4 +1,4 @@
-package com.stewart.vo;
+package com.stewart.vo.system;
 
 import lombok.Data;
 
